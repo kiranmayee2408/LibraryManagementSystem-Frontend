@@ -1,0 +1,9 @@
+# Ignore node modules and build output
+node_modules/
+dist/
+.env
+*.log
+
+# Ignore IDE/editor settings
+.vscode/
+.DS_Store
