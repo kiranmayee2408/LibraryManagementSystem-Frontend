@@ -1,0 +1,31 @@
+<div class="table-container">
+    <h2>Members</h2>
+
+    <div class="add-link">
+        <a routerLink="/members/manage">➕ Add Member</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let member of members; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ member.fullName }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.phone }}</td>
+                <td>
+                    <a [routerLink]="['/members/manage', member.memberId]">Edit</a> /
+                    <a href="#" (click)="onDelete(member.memberId)">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

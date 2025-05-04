@@ -1,19 +1,34 @@
-<h2>Books List</h2>
-<table border="1" cellpadding="8" cellspacing="0">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>ISBN</th>
-            <th>Available Copies</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let book of books">
-            <td>{{ book.title }}</td>
-            <td>{{ book.author }}</td>
-            <td>{{ book.isbn }}</td>
-            <td>{{ book.availableCopies }}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="table-container">
+    <h2>Books</h2>
+
+    <!-- ✅ Add Book Link -->
+    <div class="add-link">
+        <a routerLink="/books/manage" class="btn-add">➕ Add Book</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Available Copies</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let book of books; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.isbn }}</td>
+                <td>{{ book.availableCopies }}</td>
+                <td>
+                    <a [routerLink]="['/books/manage', book.bookId]">Edit</a> /
+                    <a href="#" (click)="onDelete(book.bookId!)">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

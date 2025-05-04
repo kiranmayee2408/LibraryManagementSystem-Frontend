@@ -1,0 +1,36 @@
+<div class="form-container">
+    <h2>{{ issueId ? 'Edit Issued Book' : 'Issue New Book' }}</h2>
+
+    <form [formGroup]="issuedBookForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label>Book ID</label>
+            <input type="number" formControlName="bookId" />
+        </div>
+
+        <div class="form-group">
+            <label>Member ID</label>
+            <input type="number" formControlName="memberId" />
+        </div>
+
+        <div class="form-group">
+            <label>Issue Date</label>
+            <input type="date" formControlName="issueDate" />
+        </div>
+
+        <div class="form-group">
+            <label>Due Date</label>
+            <input type="date" formControlName="dueDate" />
+        </div>
+
+        <div class="form-group">
+            <label>Return Date</label>
+            <input type="date" formControlName="returnDate" />
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" [disabled]="issuedBookForm.invalid">
+                {{ issueId ? 'Update' : 'Issue Book' }}
+            </button>
+        </div>
+    </form>
+</div>

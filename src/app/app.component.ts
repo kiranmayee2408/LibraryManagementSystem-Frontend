@@ -1,15 +1,35 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { BookListComponent } from './components/book-list/book-list.component';
+import { RouterOutlet, RouterModule, Router } from '@angular/router';
+
+import { AuthService } from './services/auth.service';
+import { LoginComponent } from './components/login/login.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, BookListComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    RouterOutlet,
+    RouterModule,
+    LoginComponent
+  ]
 })
 export class AppComponent {
-  title = 'library-frontend';
+  username: string | null = localStorage.getItem('username');
+
+  constructor(private authService: AuthService, private router: Router) { }
+
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }
