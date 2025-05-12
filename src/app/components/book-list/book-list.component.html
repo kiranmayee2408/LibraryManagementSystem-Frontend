@@ -1,0 +1,34 @@
+<div class="table-container">
+    <h2>Books</h2>
+
+
+    <div class="add-link" *ngIf="role === 'Admin'">
+        <a routerLink="/books/manage" class="btn-add">➕ Add Book</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Available Copies</th>
+                <th *ngIf="role === 'Admin'">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let book of books; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.isbn }}</td>
+                <td>{{ book.availableCopies }}</td>
+                <td *ngIf="role === 'Admin'">
+                    <a [routerLink]="['/books/manage', book.bookId]">Edit</a> /
+                    <a href="#" (click)="onDelete(book.bookId!)">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

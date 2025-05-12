@@ -1,0 +1,41 @@
+<div class="form-container">
+    <h2>{{ issueId ? 'Edit Issued Book' : 'Issue New Book' }}</h2>
+
+    <form (ngSubmit)="onSubmit()" #issueForm="ngForm">
+        <div class="form-group">
+            <label for="bookId">Book</label>
+            <select [(ngModel)]="formData.bookId" name="bookId" required>
+                <option value="">Select Book</option>
+                <option *ngFor="let book of books" [value]="book.bookId">{{ book.title }}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="memberId">Member</label>
+            <select [(ngModel)]="formData.memberId" name="memberId" required>
+                <option value="">Select Member</option>
+                <option *ngFor="let member of members" [value]="member.memberId">{{ member.fullName }}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="issueDate">Issue Date</label>
+            <input type="date" [(ngModel)]="formData.issueDate" name="issueDate" required />
+        </div>
+
+        <div class="form-group">
+            <label for="dueDate">Due Date</label>
+            <input type="date" [(ngModel)]="formData.dueDate" name="dueDate" required />
+        </div>
+
+        <div class="form-group">
+            <label for="returnDate">Return Date</label>
+            <input type="date" [(ngModel)]="formData.returnDate" name="returnDate" />
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="btn-save">{{ issueId ? 'Update' : 'Issue Book' }}</button>
+            <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,37 @@
+<div class="table-container">
+    <h2>Issued Books</h2>
+
+    <div class="add-link" *ngIf="role === 'Admin'">
+        <a routerLink="/issued-books/manage" class="btn-add">➕ Issue New Book</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Book Title</th>
+                <th>Member Name</th>
+                <th>Issue Date</th>
+                <th>Due Date</th>
+                <th>Return Date</th>
+                <th *ngIf="role === 'Admin'">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let record of issuedBooks; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ record.bookTitle }}</td>
+                <td>{{ record.memberName }}</td>
+                <td>{{ record.issueDate | date: 'mediumDate' }}</td>
+                <td>{{ record.dueDate | date: 'mediumDate' }}</td>
+                <td>
+                    {{ record.returnDate ? (record.returnDate | date: 'mediumDate') : 'Not Returned' }}
+                </td>
+                <td *ngIf="role === 'Admin'">
+                    <a [routerLink]="['/issued-books/manage', record.issueId]">Edit</a> /
+                    <a href="#" (click)="onDelete(record.issueId)">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

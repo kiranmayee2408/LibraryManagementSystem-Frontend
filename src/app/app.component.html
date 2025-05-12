@@ -1,0 +1,19 @@
+<h1 *ngIf="isLoggedIn()" class="visually-hidden">
+    Library Management System
+</h1>
+
+<nav class="navbar" *ngIf="isLoggedIn()">
+    <div class="nav-left">
+        <span class="app-title"></span>
+        <a routerLink="/home">Home</a>
+        <a routerLink="/books">Books</a>
+        <a routerLink="/issued-books">Issued Books</a>
+        <a routerLink="/members">Members</a>
+    </div>
+    <div class="nav-right">
+        <span class="welcome">👋 Welcome, {{ username }}!</span>
+        <button (click)="logout()">Logout</button>
+    </div>
+</nav>
+
+<router-outlet></router-outlet>
