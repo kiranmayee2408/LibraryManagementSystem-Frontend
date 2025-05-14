@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Member {
     memberId: number;
@@ -14,7 +15,7 @@ export interface Member {
     providedIn: 'root'
 })
 export class MemberService {
-    private apiUrl = 'https://localhost:7011/api/members';
+    private apiUrl = `${environment.apiUrl}/members`;
 
     constructor(private http: HttpClient) { }
 

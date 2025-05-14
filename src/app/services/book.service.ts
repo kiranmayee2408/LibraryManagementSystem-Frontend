@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 export interface Book {
   bookId?: number;
@@ -15,7 +16,7 @@ export interface Book {
   providedIn: 'root',
 })
 export class BookService {
-  private apiUrl = 'https://localhost:7011/api/books';
+  private apiUrl = `${environment.apiUrl}/books`;
 
   constructor(private http: HttpClient) { }
 

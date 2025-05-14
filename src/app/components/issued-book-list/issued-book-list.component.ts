@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { IssuedBookService, IssuedBook, IssuedBookViewModel } from '../../services/issued-book.service';
+import { IssuedBookService, IssuedBookViewModel } from '../../services/issued-book.service';
 import { AuthService } from '../../services/auth.service';
 import * as signalR from '@microsoft/signalr';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-issued-book-list',
@@ -12,7 +13,7 @@ import * as signalR from '@microsoft/signalr';
   styleUrls: ['./issued-book-list.component.css'],
   imports: [CommonModule, RouterModule]
 })
-export class IssuedBookListComponent implements OnInit {
+export class IssuedBookListComponent implements OnInit, OnDestroy {
   issuedBooks: IssuedBookViewModel[] = [];
   role: string | null = null;
   private hubConnection!: signalR.HubConnection;
@@ -20,7 +21,7 @@ export class IssuedBookListComponent implements OnInit {
   constructor(
     private issuedBookService: IssuedBookService,
     private authService: AuthService,
-    private router: Router // ✅ Add Router for navigation
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -29,8 +30,23 @@ export class IssuedBookListComponent implements OnInit {
     this.startSignalRConnection();
   }
 
+  ngOnDestroy(): void {
+    if (this.hubConnection) {
+      this.hubConnection.stop().then(() => {
+        console.log('🔌 SignalR disconnected');
+      });
+    }
+  }
+
   loadIssuedBooks(): void {
-    this.issuedBookService.getIssuedBooks().subscribe(data => this.issuedBooks = data);
+    this.issuedBookService.getIssuedBooks().subscribe({
+      next: (data) => {
+        this.issuedBooks = data;
+      },
+      error: (err) => {
+        console.error('Failed to load issued books:', err);
+      }
+    });
   }
 
   onAdd(): void {
@@ -43,24 +59,32 @@ export class IssuedBookListComponent implements OnInit {
 
   onDelete(issueId: number): void {
     if (confirm('Are you sure you want to delete this issued book record?')) {
-      this.issuedBookService.deleteIssuedBook(issueId).subscribe(() => {
-        this.loadIssuedBooks();
+      this.issuedBookService.deleteIssuedBook(issueId).subscribe({
+        next: () => {
+          console.log('✅ Issued book deleted');
+          // SignalR will trigger loadIssuedBooks()
+        },
+        error: (err) => {
+          console.error('❌ Delete failed:', err);
+          alert('Delete failed. Check console for details.');
+        }
       });
     }
   }
 
   startSignalRConnection(): void {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:7011/hubs/issued-books')
+      .withUrl(`${environment.apiUrl.replace('/api', '')}/hubs/issued-books`)
       .withAutomaticReconnect()
       .build();
 
-    this.hubConnection.start()
+    this.hubConnection
+      .start()
       .then(() => console.log('SignalR connected to issued-books hub'))
       .catch(err => console.error('SignalR connection error:', err));
 
-    this.hubConnection.on('IssuedBookUpdated', () => {
-      console.log('Received IssuedBookUpdated signal');
+    this.hubConnection.on('IssuedBooksUpdated', () => {
+      console.log('📡 Received IssuedBooksUpdated signal');
       this.loadIssuedBooks();
     });
   }
