@@ -17,7 +17,6 @@ export class AuthService {
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('isLoggedIn', 'true');
 
-                // ✅ Removed manual username saving
                 console.log('🔐 JWT Saved to localStorage');
             })
         );
@@ -60,7 +59,11 @@ export class AuthService {
 
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
-            const name = payload['username'] || payload['name'] || payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+            const name =
+                payload['username'] ||
+                payload['name'] ||
+                payload['sub'] ||
+                payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
             console.log('🧠 Decoded username:', name);
             return name || null;
         } catch {

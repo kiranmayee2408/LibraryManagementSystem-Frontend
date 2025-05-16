@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterOutlet, RouterModule, Router } from '@angular/router';
@@ -19,13 +19,23 @@ import { LoginComponent } from './components/login/login.component';
     LoginComponent
   ]
 })
-export class AppComponent {
-  username: string | null = localStorage.getItem('username');
+export class AppComponent implements OnInit {
+  username: string | null = null;
+  role: string | null = null;
 
   constructor(private authService: AuthService, private router: Router) { }
 
+  ngOnInit(): void {
+    this.username = this.authService.getUsername();
+    this.role = this.authService.getUserRole();
+  }
+
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
+  }
+
+  isAdmin(): boolean {
+    return this.role === 'Admin';
   }
 
   logout(): void {

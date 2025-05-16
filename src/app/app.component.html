@@ -10,7 +10,10 @@
         <a routerLink="/members">Members</a>
     </div>
     <div class="nav-right">
-        <span class="welcome">👋 Welcome, {{ username }}!</span>
+        <span class="welcome" *ngIf="isLoggedIn()">
+            👋 Welcome, {{ username }}!
+            <span *ngIf="isAdmin()"> (Admin)</span>
+        </span>
         <button (click)="logout()">Logout</button>
     </div>
 </nav>
